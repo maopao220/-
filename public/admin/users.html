@@ -27,7 +27,7 @@
             <button class="btn btn-default navbar-btn fa fa-bars"></button>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="profile.html"><i class="fa fa-user"></i>个人中心</a></li>
-                <li><a href="login.html"><i class="fa fa-sign-out"></i>退出</a></li>
+                <li><a href="javascript:;" id="logout"><i class="fa fa-sign-out"></i>退出</a></li>
             </ul>
         </nav>
         <div class="container-fluid">
@@ -35,9 +35,9 @@
                 <h1>用户</h1>
             </div>
             <!-- 有错误信息时展示 -->
-            <!-- <div class="alert alert-danger">
-                <strong>错误！</strong>发生XXX错误
-            </div> -->
+            <div class="alert alert-danger" style="display: none">
+                <strong>错误！</strong> <span id="msg">发生XXX错误</span>
+            </div>
             <div class="row">
                 <div class="col-md-4">
                     <form>
@@ -76,10 +76,10 @@
                         </div>
                         <div class="form-group">
                             <div class="radio-inline">
-                                <label><input type="radio" name="role" id="admin" value="admin" checked>超级管理员</label>
+                                <label><input type="radio" name="role" id="admin" value="admin">超级管理员</label>
                             </div>
                             <div class="radio-inline">
-                                <label><input type="radio" name="role" id="normal" value="normal">普通用户</label>
+                                <label><input type="radio" name="role" id="normal" value="normal" checked>普通用户</label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -189,6 +189,7 @@
     <script src="../assets/vendors/jquery/jquery.js"></script>
     <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
     <script src="../assets/vendors/art-template/template-web.js"></script>
+    <script src="../assets/js/common.js"></script>
     <script type="text/html" id="userTpl">
         {{each list}}
         <tr>
@@ -233,6 +234,27 @@
 
         //用户添加功能
         $('#addUser').on('click', function() {
+            var email = $('#email').val().trim().replace(/\s/g, '');
+            var nickName = $('#nickName').val().trim().replace(/\s/g, '');
+            var password = $('#password').val().trim().replace(/\s/g, '');
+            var regEmail = /\w+[@]\w+[.]\w+/;
+            if (!regEmail.test(email)) {
+                $('.alert').fadeIn(1000).delay(1000).fadeOut(1000);
+                $('#msg').text('邮箱地址不合法，请重新输入');
+                return;
+            }
+            var regNickName = /^[\u4E00-\u9FA5A-Za-z0-9_]{2,10}$/;
+            if (!regNickName.test(nickName)) {
+                $('.alert').fadeIn(1000).delay(1000).fadeOut(1000);
+                $('#msg').text('昵称不合法，请重新输入');
+                return;
+            }
+            var regPassword = /\w{4,20}/;
+            if (!regPassword.test(password)) {
+                $('.alert').fadeIn(1000).delay(1000).fadeOut(1000);
+                $('#msg').text('密码不合法，请重新输入');
+                return;
+            }
             //收集表单数据
             let formData = $('form').serialize();
             $.ajax({
@@ -242,6 +264,18 @@
                 success: function(res) {
                     userArr.push(res);
                     render(userArr);
+                    $('#addUser').show();
+                    $('editUser').hide();
+                    $('#userForm > h2').text('添加新用户');
+                    $('#img').val("");
+                    $('#prev').attr("src", "../assets/img/default.png");
+                    $('#email').val("");
+                    $('#nickName').val("");
+                    $('#password').val("");
+                    $('#activate').prop('checked', true);
+                    $('#nonactivated').prop('checked', false);
+                    $('#admin').prop('checked', false);
+                    $('#normal').prop('checked', true);
                 }
             })
         });
@@ -300,6 +334,13 @@
 
         //给修改按钮注册点击事件
         $('#editUser').on('click', function() {
+            var nickName = $('#nickName').val().trim().replace(/\s/g, '');
+            var regNickName = /^[\u4E00-\u9FA5A-Za-z0-9_]{2,10}$/;
+            if (!regNickName.test(nickName)) {
+                $('.alert').fadeIn(1000).delay(1000).fadeOut(1000);
+                $('#msg').text('昵称不合法，请重新输入');
+                return;
+            }
             var formData = $('form').serialize();
             $.ajax({
                 type: 'put',
@@ -321,7 +362,8 @@
                     $('#admin').prop('checked', false);
                     $('#normal').prop('checked', true);
                 }
-            })
+            });
+            $('#editUser').hide();
         });
     </script>
 </body>
