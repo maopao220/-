@@ -203,6 +203,22 @@
                 }
             });
         });
+
+        //删除单个分类
+        $('tbody').on('click', '.delete', function() {
+            if (confirm("你真的要删除吗?")) {
+                var id = $(this).parent().attr('data-id');
+                $.ajax({
+                    type: 'delete',
+                    url: '/categories/' + id,
+                    success: function(res) {
+                        var index = cateArr.findIndex(item => item._id == res._id);
+                        cateArr.splice(index, 1);
+                        render(cateArr);
+                    }
+                });
+            }
+        });
     </script>
 </body>
 
