@@ -39,15 +39,15 @@
                 <!-- show when multiple checked -->
                 <a class="btn btn-danger btn-sm" href="javascript:;" style="display: none">批量删除</a>
                 <form class="form-inline">
-                    <select name="" class="form-control input-sm">
-            <option value="">所有分类</option>
+                    <select name="category" class="form-control input-sm" id="category">
+            <option value="all">所有分类</option>
           </select>
-                    <select name="" class="form-control input-sm">
-            <option value="">所有状态</option>
-            <option value="">草稿</option>
-            <option value="">已发布</option>
+                    <select name="state" class="form-control input-sm" id="state">
+            <option value="all">所有状态</option>
+            <option value="0">草稿</option>
+            <option value="1">已发布</option>
           </select>
-                    <button class="btn btn-default btn-sm">筛选</button>
+                    <button class="btn btn-default btn-sm" type="button" id="btnSearch">筛选</button>
                 </form>
                 <ul class="pagination pagination-sm pull-right" id="page">
                     <!-- <li><a href="#">上一页</a></li>
@@ -176,35 +176,25 @@
         < pages}} <li><a href="javascript:;" onclick="changePage({{page - 0 + 1}})">下一页</a></li>
             {{/if}}
     </script>
+    <script type="text/html" id="categoryTpl">
+        {{each list}}
+        <option value="{{$value._id}}">{{$value.title}}</option>
+        {{/each}}
+    </script>
     <script>
         //请求服务器 得到文章 并将其显示出来
         template.defaults.imports.dataFormat = dataFormat;
-        $.ajax({
-            type: 'get',
-            url: '/posts',
-            success: function(res) {
-                var str = template('postsTpl', res);
-                $('tbody').html(str);
-                var pageStr = template('pageTpl', res);
-                $('#page').html(pageStr);
-            }
-        });
+        var cate = $('#category').val();
+        var state = $('#state').val();
 
-        //格式化时间
-        function dataFormat(data) {
-            var nDate = new Date(data);
-            // padStart(字符串的位数，需要填充的字符串)
-            var str = nDate.getFullYear() + '-' + (nDate.getMonth() + 1).toString().padStart(2, 0) + '-' + (nDate.getDate()).toString().padStart(2, 0);
-            return str;
-        }
-
-        //完成所有文章分页功能
-        function changePage(index) {
+        function render(category = "all", state = "all", page = 1) {
             $.ajax({
                 type: 'get',
                 url: '/posts',
                 data: {
-                    page: index
+                    page: page,
+                    category: category,
+                    state: state
                 },
                 success: function(res) {
                     var str = template('postsTpl', res);
@@ -214,6 +204,39 @@
                 }
             });
         }
+        render();
+
+        //格式化时间
+        function dataFormat(data) {
+            var nDate = new Date(data);
+            // padStart(字符串的位数，需要填充的字符串)
+            var str = nDate.getFullYear() + '-' + (nDate.getMonth() + 1).toString().padStart(2, 0) + '-' + (nDate.getDate()).toString().padStart(2, 0);
+            return str;
+        };
+
+        //完成所有文章分页功能
+        function changePage(index) {
+            render(cate, state, index);
+        };
+
+        // 完成所有文章筛选功能
+        $.ajax({
+            type: 'get',
+            url: '/categories',
+            success: function(res) {
+                var str = template('categoryTpl', {
+                    list: res
+                });
+                $('#category').append(str);
+                var pageStr = template('pageTpl', res);
+                $('#page').html(pageStr);
+            }
+        });
+        $('#btnSearch').on('click', function() {
+            cate = $('#category').val();
+            state = $('#state').val();
+            render(cate, state);
+        })
     </script>
 </body>
 
