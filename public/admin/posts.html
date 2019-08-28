@@ -69,7 +69,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <!-- <tr>
                         <td>随便一个名称</td>
                         <td>小小</td>
                         <td>潮科技</td>
@@ -101,7 +101,7 @@
                             <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
                             <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
                         </td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
@@ -146,8 +146,43 @@
 
     <script src="../assets/vendors/jquery/jquery.js"></script>
     <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
+    <script src="../assets/vendors/art-template/template-web.js"></script>
     <script>
         NProgress.done()
+    </script>
+    <script type="text/html" id="postsTpl">
+        {{each records}}
+        <tr>
+            <td>{{$value.title}}</td>
+            <td>{{$value.author.nickName}}</td>
+            <td>{{$value.category.title}}</td>
+            <td class="text-center">{{dataFormat($value.createAt)}}</td>
+            <td class="text-center">{{$value.state == 1 ? '已发布' : '草稿'}}</td>
+            <td class="text-center">
+                <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
+                <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+    <script>
+        //请求服务器 得到文章 并将其显示出来
+        template.defaults.imports.dataFormat = dataFormat;
+        $.ajax({
+            type: 'get',
+            url: '/posts',
+            success: function(res) {
+                var str = template('postsTpl', res);
+                $('tbody').html(str);
+            }
+        });
+
+        function dataFormat(data) {
+            var nDate = new Date(data);
+            // padStart(字符串的位数，需要填充的字符串)
+            var str = nDate.getFullYear() + '-' + (nDate.getMonth() + 1).toString().padStart(2, 0) + '-' + (nDate.getDate()).toString().padStart(2, 0);
+            return str;
+        }
     </script>
 </body>
 
