@@ -164,8 +164,8 @@
         });
 
         //完成添加文章功能
-        $('#addForm').on('submit', function() {
-            var formData = $(this).serialize();
+        $('#pAdd').on('click', function() {
+            var formData = $('form').serialize();
             $.ajax({
                 type: 'post',
                 url: '/posts',
@@ -174,7 +174,6 @@
                     location.href = '/admin/posts.html'
                 }
             })
-            return false;
         });
 
         //从浏览器地址栏中
@@ -225,6 +224,16 @@
                     location.href = 'posts.html'
                 }
             })
+        });
+
+        //展示用户相关信息
+        $.ajax({
+            type: 'get',
+            url: '/users/' + userId,
+            success: function(res) {
+                $('.avatar').attr('src', res.avatar);
+                $('.profile .name').html(res.nickName);
+            }
         });
     </script>
 </body>
