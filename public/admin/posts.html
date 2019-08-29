@@ -202,6 +202,7 @@
                     $('tbody').html(str);
                     var pageStr = template('pageTpl', res);
                     $('#page').html(pageStr);
+                    console.log(res);
                 }
             });
         }
@@ -221,18 +222,6 @@
         };
 
         // 完成所有文章筛选功能
-        $.ajax({
-            type: 'get',
-            url: '/categories',
-            success: function(res) {
-                var str = template('categoryTpl', {
-                    list: res
-                });
-                $('#category').append(str);
-                var pageStr = template('pageTpl', res);
-                $('#page').html(pageStr);
-            }
-        });
         $('#btnSearch').on('click', function() {
             cate = $('#category').val();
             state = $('#state').val();
