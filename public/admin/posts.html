@@ -222,6 +222,16 @@
         };
 
         // 完成所有文章筛选功能
+        $.ajax({
+            type: 'get',
+            url: '/categories',
+            success: function(res) {
+                var str = template('categoryTpl', {
+                    list: res
+                });
+                $('#category').append(str);
+            }
+        });
         $('#btnSearch').on('click', function() {
             cate = $('#category').val();
             state = $('#state').val();
