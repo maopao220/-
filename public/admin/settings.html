@@ -42,7 +42,7 @@
                 <div class="form-group">
                     <label for="site_logo" class="col-sm-2 control-label">网站图标</label>
                     <div class="col-sm-6">
-                        <input id="img" name="img" type="hidden">
+                        <input id="img" name="logo" type="hidden">
                         <label class="form-image">
               <input id="logo" type="file">
               <img src="../assets/img/logo.png" id="prev">
@@ -56,26 +56,26 @@
                         <input id="site_name" name="title" class="form-control" type="type" placeholder="站点名称">
                     </div>
                 </div>
-                <!-- <div class="form-group">
+                <div class="form-group">
                     <label for="site_description" class="col-sm-2 control-label">站点描述</label>
                     <div class="col-sm-6">
-                        <textarea id="site_description" name="site_description" class="form-control" placeholder="站点描述" cols="30" rows="6"></textarea>
+                        <textarea id="site_description" name="description" class="form-control" placeholder="站点描述" cols="30" rows="6"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="site_keywords" class="col-sm-2 control-label">站点关键词</label>
                     <div class="col-sm-6">
-                        <input id="site_keywords" name="site_keywords" class="form-control" type="type" placeholder="站点关键词">
+                        <input id="site_keywords" name="keywords" class="form-control" type="type" placeholder="站点关键词">
                     </div>
-                </div> -->
+                </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">评论</label>
                     <div class="col-sm-6">
                         <div class="checkbox">
-                            <label><input id="comment_status" name="comment" type="checkbox" checked value="true">开启评论功能</label>
+                            <label><input id="status" name="comment" type="checkbox" checked value="true">开启评论功能</label>
                         </div>
                         <div class="checkbox">
-                            <label><input id="comment_reviewed" name="review" type="checkbox" checked value="true">评论必须经人工批准</label>
+                            <label><input id="review" name="review" type="checkbox" checked value="true">评论必须经人工批准</label>
                         </div>
                     </div>
                 </div>
@@ -168,11 +168,13 @@
             url: '/settings',
             success: function(res) {
                 if (res) {
-                    $('#img').val(res.img);
-                    $('#prev').attr('src', res.img);
+                    $('#img').val(res.logo);
+                    $('#prev').attr('src', res.logo);
                     $('#site_name').val(res.title);
-                    $('#comment_status').prop('checked', res.comment);
-                    $('#comment_reviewed').prop('checked', res.review);
+                    $('#site_description').val(res.description);
+                    $('#site_keywords').val(res.keywords);
+                    $('#status').prop('checked', res.comment);
+                    $('#review').prop('checked', res.review);
                 }
             }
         });

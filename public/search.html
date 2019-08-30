@@ -12,8 +12,8 @@
         return -1;
     };
 
-    var cid = getUrlParams('categoryId');
-    if (cid == -1) {
+    var key = getUrlParams('key');
+    if (key == -1) {
         location.href = 'index.html';
     }
 </script>
@@ -85,7 +85,7 @@
     <script src="assets/vendors/jquery/jquery.min.js"></script>
     <script src="assets/vendors/art-template/template-web.js"></script>
     <script src="assets/js/public.js"></script>
-    <script type="text/html" id="listTpl">
+    <script type="text/html" id="searchTpl">
         <h3>{{data[0].category.title}}</h3>
         {{each data}}
         <div class="entry">
@@ -117,9 +117,9 @@
     <script>
         $.ajax({
             type: 'get',
-            url: '/posts/category/' + cid,
+            url: '/posts/search/' + key,
             success: function(response) {
-                var html = template('listTpl', {
+                var html = template('searchTpl', {
                     data: response
                 });
                 $('#listBox').html(html)

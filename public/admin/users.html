@@ -46,7 +46,7 @@
                             <label>头像</label>
                             <div class="form-group">
                                 <label class="form-image">
-                  <input id="avatar" type="file">
+                  <input id="avatar" type="file"> 
                   <img src="../assets/img/default.png" id="prev">
                   <i class="mask fa fa-upload"></i>
                 </label>
@@ -151,7 +151,7 @@
 
     <div class="aside">
         <div class="profile">
-            <img class="avatar" src="../uploads/avatar.jpg">
+            <img class="avatar" id="avatar" src="../uploads/avatar.jpg">
             <h3 class="name">Coder</h3>
         </div>
         <ul class="nav">
@@ -433,7 +433,7 @@
             type: 'get',
             url: '/users/' + userId,
             success: function(res) {
-                $('.avatar').attr('src', res.avatar);
+                $('#avatar').attr('src', res.avatar);
                 $('.profile .name').html(res.nickName);
             }
         });

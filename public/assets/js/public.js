@@ -5,18 +5,18 @@
 //   return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
 // }
 
-// // 从浏览器的地址栏中获取查询参数
-// function getUrlParams(name) {
-// 	var paramsAry = location.search.substr(1).split('&');
-// 	// 循环数据
-// 	for (var i = 0; i < paramsAry.length; i++) {
-// 		var tmp = paramsAry[i].split('=');
-// 		if (tmp[0] == name) {
-// 			return tmp[1];
-// 		}
-// 	}
-// 	return -1;
-// }
+// 从浏览器的地址栏中获取查询参数
+function getUrlParams(name) {
+    var paramsAry = location.search.substr(1).split('&');
+    // 循环数据
+    for (var i = 0; i < paramsAry.length; i++) {
+        var tmp = paramsAry[i].split('=');
+        if (tmp[0] == name) {
+            return tmp[1];
+        }
+    }
+    return -1;
+}
 
 // 向服务器端发送请求 索要随机推荐数据
 $.ajax({
@@ -68,32 +68,32 @@ $.ajax({
     }
 })
 
-// // 向服务器端发送请求 索要文章分类列表数据
-// $.ajax({
-// 	type: 'get',
-// 	url: '/categories',
-// 	success: function (response) {
-// 		var navTpl = `
-// 			{{each data}}
-// 			<li>
-// 				<a href="list.html?categoryId={{$value._id}}">
-// 					<i class="fa {{$value.className}}"></i>{{$value.title}}
-// 				</a>
-// 			</li>
-// 			{{/each}}
-// 		`;
-// 		var html = template.render(navTpl, {data: response});
-// 		$('#navBox').html(html)
-// 		$('#topNavBox').html(html)
-// 	}
-// })
+// 向服务器端发送请求 索要文章分类列表数据
+$.ajax({
+    type: 'get',
+    url: '/categories',
+    success: function(response) {
+        var navTpl = `
+			{{each data}}
+			<li>
+				<a href="list.html?categoryId={{$value._id}}">
+					<i class="fa {{$value.className}}"></i>{{$value.title}}
+				</a>
+			</li>
+			{{/each}}
+		`;
+        var html = template.render(navTpl, { data: response });
+        $('#navBox').html(html)
+        $('#topNavBox').html(html)
+    }
+})
 
-// // 获取到搜索表单 并为其添加表单提交事件
-// $('.search form').on('submit', function () {
-// 	// 获取到用户在表单中输入的搜索关键字
-// 	var keys = $(this).find('.keys').val();
-// 	// 跳转到搜索结果页面 并且将用户输入的搜索关键字传递到搜索结果页面
-// 	location.href = "/search.html?key=" + keys
-// 	// 阻止表单默认提交行为
-// 	return false;
-// });
+// 获取到搜索表单 并为其添加表单提交事件
+$('.search form').on('submit', function() {
+    // 获取到用户在表单中输入的搜索关键字
+    var keys = $(this).find('.keys').val();
+    // 跳转到搜索结果页面 并且将用户输入的搜索关键字传递到搜索结果页面
+    location.href = "/search.html?key=" + keys
+        // 阻止表单默认提交行为
+    return false;
+});
